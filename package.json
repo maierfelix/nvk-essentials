@@ -1,0 +1,31 @@
+{
+  "name": "nvk-essentials",
+  "main": "index.mjs",
+  "version": "0.0.6",
+  "engines": {
+    "node": ">= 10.9.0"
+  },
+  "devDependencies": {},
+  "dependencies": {},
+  "scripts": {
+    "test": "node --experimental-modules tests/index.mjs"
+  },
+  "description": "Essential development tools for nvk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maierfelix/nvk-essentials.git"
+  },
+  "keywords": [
+    "nvk",
+    "vulkan",
+    "spirv",
+    "glsl",
+    "shader"
+  ],
+  "author": "Felix Maier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maierfelix/nvk-essentials/issues"
+  },
+  "homepage": "https://github.com/maierfelix/nvk-essentials#readme"
+}
