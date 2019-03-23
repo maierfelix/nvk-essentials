@@ -35,12 +35,22 @@ Returns the binary SPIR-V representation of the passed in GLSL source. This func
 ````
 
 Available extensions are:
-* `vert` for a vertex shader
-* `tesc` for a tessellation control shader
-* `tese` for a tessellation evaluation shader
-* `geom` for a geometry shader
-* `frag` for a fragment shader
-* `comp` for a compute shader
+* `.vert`  for a vertex shader
+* `.tesc`  for a tessellation control shader
+* `.tese`  for a tessellation evaluation shader
+* `.geom`  for a geometry shader
+* `.frag`  for a fragment shader
+* `.comp`  for a compute shader
+* `.mesh`  for a mesh shader
+* `.task`  for a task shader
+* `.rgen`  for a ray generation shader
+* `.rint`  for a ray intersection shader
+* `.rahit` for a ray any hit shader
+* `.rchit` for a ray closest hit shader
+* `.rmiss` for a ray miss shader
+* `.rcall` for a ray callable shader
+* `.glsl`  for .vert.glsl, .tesc.glsl, ..., .comp.glsl compound suffixes
+* `.hlsl`  for .vert.hlsl, .tesc.hlsl, ..., .comp.hlsl compound suffixes
 
 Examples:
 

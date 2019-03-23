@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { spawn, execSync } from "child_process";
- 
+
 const platform = process.platform;
 const __dirname = path.dirname(new URL(import.meta.url).pathname).substr(1);
 
@@ -12,7 +12,7 @@ if (platform === `linux` || platform === `darwin`) {
 }
 
 let version = execSync(`${glslangPath} -v`).toString();
- 
+
 function isValidExtension(ext) {
   switch (ext) {
     case "vert":
@@ -21,11 +21,21 @@ function isValidExtension(ext) {
     case "geom":
     case "frag":
     case "comp":
+    case "mesh":
+    case "task":
+    case "rgen":
+    case "rint":
+    case "rahit":
+    case "rchit":
+    case "rmiss":
+    case "rcall":
+    case "glsl":
+    case "hlsl":
       return true;
   };
   return false;
 };
- 
+
 function reserve({ source, extension }, workDir) {
   fs.mkdirSync(`${workDir}`, { recursive: true });
   fs.writeFileSync(`${workDir}/input.${extension}`, source);
