@@ -1,7 +1,7 @@
 {
   "name": "nvk-essentials",
   "main": "index.mjs",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "node": ">= 10.9.0"
   },
