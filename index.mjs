@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { spawn, execSync } from "child_process";
-
+ 
 const platform = process.platform;
 const __dirname = path.dirname(new URL(import.meta.url).pathname).substr(1);
 
@@ -48,8 +48,25 @@ function free(paths) {
     else fs.rmdirSync(p);
   });
 };
- 
-function toSPIRV({ source, extension }) {
+
+function flattenSource(source, includesPath) {
+  let rx = /#include ((<[^>]+>)|("[^"]+"))/g;
+  let match = null;
+  let txtSrc = source.toString();
+  while (match = rx.exec(txtSrc)) {
+    let fileName = match[1].slice(1, -1);
+    let start = match.index;
+    let length = match[0].length;
+    let includedFile = flattenSource(
+      fs.readFileSync(includesPath + "/" + fileName, "utf8"),
+      includesPath
+    );
+    txtSrc = txtSrc.substr(0, start) + includedFile + txtSrc.substr(start + length);
+  };
+  return Buffer.from(txtSrc, "utf8");
+};
+
+function toSPIRV({ source, extension, includesPath = "" }) {
   let ext = (
     platform === `win32`  ? `.exe` :
     platform === `linux`  ? `` :
@@ -60,7 +77,11 @@ function toSPIRV({ source, extension }) {
   let workDir = `${__dirname}/uid-${uid}`;
   let inputPath = `${workDir}/input.${extension}`;
   let outputPath = `${workDir}/output.${extension}.spv`;
-  let cmd = `${glslangPath} -V ${inputPath} -o ${outputPath} -s`;
+  let cmd = `${glslangPath} -V ${inputPath} -o ${outputPath}`;
+  // flatten input
+  {
+    source = flattenSource(source.toString(), includesPath);
+  }
   return new Promise(resolve => {
     if (!extension) {
       let msg = `Error: No extension provided!`;
@@ -83,8 +104,8 @@ function toSPIRV({ source, extension }) {
     });
   });
 };
- 
-function toSPIRVSync({ source, extension }) {
+
+function toSPIRVSync({ source, extension, includesPath = "" }) {
   let ext = (
     platform === `win32`  ? `.exe` :
     platform === `linux`  ? `` :
@@ -96,6 +117,10 @@ function toSPIRVSync({ source, extension }) {
   let inputPath = `${workDir}/input.${extension}`;
   let outputPath = `${workDir}/output.${extension}.spv`;
   let cmd = `${glslangPath} -V ${inputPath} -o ${outputPath} -s`;
+  // flatten input
+  {
+    source = flattenSource(source.toString(), includesPath);
+  }
   if (!extension) {
     let msg = `Error: No extension provided!`;
     return ({ error: msg });
