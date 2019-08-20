@@ -147,7 +147,6 @@ const GLSL = {
   toSPIRVSync
 };
 
-console.log(module.exports);
 module.exports = {
   GLSL
 };
