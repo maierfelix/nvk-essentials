@@ -1,9 +1,8 @@
-import fs from "fs";
-import path from "path";
-import { spawn, execSync } from "child_process";
+const fs = require("fs");
+const path = require("path");
+const { spawn, execSync } = require("child_process");
  
-const platform = process.platform;
-const __dirname = path.dirname(new URL(import.meta.url).pathname).substr(1);
+const {platform} = process;
 
 let glslangPath = `${__dirname}/bin/${platform}/bin`;
 if (platform === `linux` || platform === `darwin`) {
@@ -147,7 +146,8 @@ const GLSL = {
   toSPIRV,
   toSPIRVSync
 };
- 
-export {
+
+console.log(module.exports);
+module.exports = {
   GLSL
 };

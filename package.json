@@ -1,6 +1,6 @@
 {
   "name": "nvk-essentials",
-  "main": "index.mjs",
+  "main": "index.js",
   "version": "0.0.8",
   "engines": {
     "node": ">= 10.9.0"
@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/maierfelix/nvk-essentials/issues"
   },
-  "homepage": "https://github.com/maierfelix/nvk-essentials#readme"
+  "homepage": "https://github.com/maierfelix/nvk-essentials#readme",
+  "directories": {
+    "test": "tests"
+  }
 }
