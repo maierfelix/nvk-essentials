@@ -1,0 +1,38 @@
+#version 460
+#extension GL_NV_ray_tracing : require
+#extension GL_GOOGLE_include_directive : enable
+
+struct RayPayload {
+  vec4 colorAndDistance;
+  vec4 scatterDirection;
+  uint seed;
+};
+
+layout(location = 0) rayPayloadNV RayPayload Ray;
+
+layout(binding = 0, set = 0) uniform accelerationStructureNV topLevelAS;
+
+layout(binding = 1, set = 0, rgba8) uniform image2D outputImage;
+layout(binding = 2, rgba32f) uniform image2D accumulationImage;
+
+layout(binding = 3, set = 0) uniform CameraData {
+  mat4 mViewInverse;
+  mat4 mProjectionInverse;
+  float aperture;
+  float focusDistance;
+  uint numberOfSamples;
+  uint totalSampleCount;
+  uint numberOfBounces;
+} uCamera;
+
+void main() {
+  ivec2 ipos = ivec2(gl_LaunchIDNV.xy);
+
+  vec3 pixelColor = vec3(0);
+  const vec3 accumulatedColor = imageLoad(accumulationImage, ivec2(ipos.xy)).rgb + pixelColor;
+
+  pixelColor = sqrt(accumulatedColor / uCamera.totalSampleCount);
+
+  imageStore(accumulationImage, ivec2(ipos.xy), vec4(pixelColor, 0));
+  imageStore(outputImage, ivec2(ipos.xy), vec4(pixelColor, 0));
+}
