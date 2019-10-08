@@ -8,6 +8,13 @@ const computeSrc = fs.readFileSync(`./tests/shaders/basic.comp`);
 const rayGenSrc = fs.readFileSync(`./tests/shaders/basic.rgen`);
 const rayCHitSrc = fs.readFileSync(`./tests/shaders/basic.rchit`);
 
+const include0 = fs.readFileSync(`./tests/shaders/include0.rchit`);
+const include1 = fs.readFileSync(`./tests/shaders/include1.vert`);
+const include2 = fs.readFileSync(`./tests/shaders/include2.vert`);
+const include3 = fs.readFileSync(`./tests/shaders/include3.vert`);
+const include4 = fs.readFileSync(`./tests/shaders/include4.vert`);
+const include5 = fs.readFileSync(`./tests/shaders/include5.vert`);
+
 let errors = [];
 
 function error(error, desc) {
@@ -70,6 +77,84 @@ function error(error, desc) {
     if (output.error) throw output.error;
   } catch (e) {
     error(e, "GLSL.toSPIRVSync with 'Ray-Closest-Hit shader' failed!");
+  }
+}
+
+{
+  let output = null;
+  let includeDirectories = [
+    "./tests/shaders"
+  ];
+  try {
+    output = GLSL.toSPIRVSync({ source: include0, extension: `rchit`, includeDirectories });
+    if (output.error) throw output.error;
+  } catch (e) {
+    error(e, "GLSL.toSPIRVSync with 'Basic include' failed!");
+  }
+}
+
+{
+  let output = null;
+  let includeDirectories = [
+    "./tests/shaders"
+  ];
+  try {
+    output = GLSL.toSPIRVSync({ source: include1, extension: `vert`, includeDirectories });
+    if (output.error) throw output.error;
+  } catch (e) {
+    error(e, "GLSL.toSPIRVSync with 'Recursive include' failed!");
+  }
+}
+
+{
+  let output = null;
+  let includeDirectories = [
+    "./tests/shaders"
+  ];
+  try {
+    output = GLSL.toSPIRVSync({ source: include2, extension: `vert`, includeDirectories });
+    if (output.error) throw output.error;
+  } catch (e) {
+    error(e, "GLSL.toSPIRVSync with 'Folder include' failed!");
+  }
+}
+
+{
+  let output = null;
+  let includeDirectories = [
+    "./tests/shaders/include"
+  ];
+  try {
+    output = GLSL.toSPIRVSync({ source: include3, extension: `vert`, includeDirectories });
+    if (output.error) throw output.error;
+  } catch (e) {
+    error(e, "GLSL.toSPIRVSync with 'Direct folder include' failed!");
+  }
+}
+
+{
+  let output = null;
+  let includeDirectories = [
+    "./tests/shaders"
+  ];
+  try {
+    output = GLSL.toSPIRVSync({ source: include4, extension: `vert`, includeDirectories });
+    if (output.error) throw output.error;
+  } catch (e) {
+    error(e, "GLSL.toSPIRVSync with 'Complex include' failed!");
+  }
+}
+
+{
+  let output = null;
+  let includeDirectories = [
+    "./tests/shaders"
+  ];
+  try {
+    output = GLSL.toSPIRVSync({ source: include5, extension: `vert`, includeDirectories });
+    if (!output.error) throw output.error;
+  } catch (e) {
+    error(e, "GLSL.toSPIRVSync with 'Ambiguous include' failed!");
   }
 }
 
