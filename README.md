@@ -30,7 +30,8 @@ Returns the binary SPIR-V representation of the passed in GLSL source. This func
 ````js
 {
   source: <Buffer>,
-  extension: <String>
+  extension: <String>,
+  *includeDirectories: <String[]>
 }
 ````
 
@@ -72,4 +73,37 @@ let {output, error} = GLSL.toSPIRVSync({
   source: fs.readFileSync(`./shaders/object.frag`),
   extension: `frag`
 });
+````
+
+#### includeDirectories
+
+When having include directives in a shader, similar to C, an include Path has to be specified.
+
+##### main.js
+````js
+let {output, error} = GLSL.toSPIRVSync({
+  source: fs.readFileSync(`./shaders/main.vert`),
+  extension: `vert`,
+  includeDirectories: [`./shaders`]
+});
+````
+
+##### shaders/main.vert
+````glsl
+#version 460
+
+#extension GL_GOOGLE_include_directive : enable
+
+#include "utils.glsl"
+
+void main() {
+  gl_Position = vec4(utilityColorFunction(), 1.0);
+}
+````
+
+##### shaders/utils.glsl
+````glsl
+vec3 utilityColorFunction() {
+  return vec3(1, 0, 0);
+}
 ````
